@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172554">
+<title>Rozgrzewka — wymagania i UML</title>
+<style>
+:root{color-scheme:light;--ink:#172033;--muted:#5b6475;--line:#d9deea;--paper:#f5f7fb;--card:#fff;--blue:#2448a5;--blue2:#eaf0ff;--green:#146c43;--greenbg:#e9f7ef;--red:#9b2c2c;--redbg:#fff0f0;--gold:#855b00;--goldbg:#fff6d9;--radius:16px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--blue)}button,input,textarea,select{font:inherit}button{cursor:pointer}.hero{background:linear-gradient(135deg,#172554,#2448a5);color:#fff;padding:48px 22px 38px}.hero-inner,main,footer{max-width:960px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;font-weight:750;opacity:.8}.hero h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.1;margin:.55rem 0 1rem;max-width:750px}.hero p{max-width:720px;margin:0;color:#e1e8ff;font-size:1.08rem}.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.hero-tags span{border:1px solid #ffffff55;border-radius:99px;padding:4px 11px;font-size:.86rem}main{padding:28px 18px 64px}.intro{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:24px}.intro h2{margin:0 0 6px;font-size:1.15rem}.intro p{margin:0;color:var(--muted)}.exercise{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin:22px 0;overflow:hidden;box-shadow:0 4px 18px #17255408}.exercise-head{padding:21px 23px 14px;border-bottom:1px solid var(--line)}.num{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--blue2);color:var(--blue);font-weight:800;margin-right:8px}.exercise h2{display:inline;font-size:1.35rem}.exercise-head p{margin:8px 0 0;color:var(--muted)}.content{padding:20px 23px 24px}.item{border:1px solid var(--line);border-radius:12px;padding:15px;margin:12px 0}.statement{font-weight:650;margin-bottom:12px}.choices{display:flex;flex-wrap:wrap;gap:9px}.choice{border:1px solid #bac5dc;border-radius:9px;background:#fff;padding:8px 14px;color:var(--ink)}.choice:hover{border-color:var(--blue);background:#f7f9ff}.choice[aria-pressed="true"]{background:var(--blue2);border-color:var(--blue);color:var(--blue);font-weight:700}.feedback{margin-top:12px;border-radius:9px;padding:10px 12px;font-size:.95rem}.feedback.good{background:var(--greenbg);color:var(--green)}.feedback.bad{background:var(--redbg);color:var(--red)}.feedback.neutral{background:#f0f3fa;color:#39445b}.feedback[hidden]{display:none}.subhead{font-size:1.05rem;margin:20px 0 8px}.note{border-left:4px solid #d4a72c;background:var(--goldbg);padding:12px 15px;border-radius:0 9px 9px 0;color:#604500;margin:16px 0}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.btn{border:0;border-radius:9px;background:var(--blue);color:#fff;padding:10px 15px;font-weight:700}.btn.secondary{background:#e9edf6;color:#25314a}.reveal{margin-top:14px}.reveal summary{cursor:pointer;color:var(--blue);font-weight:700;padding:6px 0}.answer{background:#f5f7fc;border:1px solid var(--line);padding:14px 16px;border-radius:10px;margin-top:10px}.answer p:first-child{margin-top:0}.answer p:last-child{margin-bottom:0}pre{overflow:auto;background:#111827;color:#e5e7eb;padding:15px;border-radius:10px;font-size:.88rem;line-height:1.5}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-weight:700}.field small{color:var(--muted)}input[type=text],textarea,select{width:100%;border:1px solid #bac5dc;border-radius:9px;padding:10px 12px;background:#fff;color:var(--ink)}textarea{min-height:95px;resize:vertical}.checklist{display:grid;gap:9px;margin:14px 0}.checkline{display:flex;gap:10px;align-items:flex-start}.checkline input{margin-top:6px;accent-color:var(--blue)}.progress{display:flex;align-items:center;gap:12px;margin:20px 0 4px}.track{height:8px;background:#e2e7f1;border-radius:99px;overflow:hidden;flex:1}.track span{display:block;height:100%;width:0;background:var(--blue);transition:width .2s}.small{font-size:.9rem;color:var(--muted)}footer{padding:0 18px 32px;color:var(--muted);font-size:.9rem}.toplink{display:inline-block;margin-top:12px}.status{font-weight:700;color:var(--blue)}
+@media(max-width:620px){.hero{padding:34px 18px 30px}.content,.exercise-head{padding-left:16px;padding-right:16px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.exercise h2{font-size:1.2rem}.intro{padding:17px}}
+@media print{body{background:#fff}.hero{background:#fff;color:#111;padding:20px 0}.hero p{color:#333}.hero-tags,.choices,.actions,.progress,footer{display:none!important}main{padding:0}.exercise{break-inside:avoid;box-shadow:none}.feedback[hidden]{display:none}.exercise{border-color:#aaa}}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="eyebrow">Laboratorium · rozgrzewka</div>
+    <h1>Wymagania i diagramy UML</h1>
+    <p>Trzy krótkie ćwiczenia wspólne dla całej grupy. Najpierw spróbuj samodzielnie, potem sprawdź uzasadnienie.</p>
+    <div class="hero-tags"><span>15–25 minut</span><span>FR / NFR</span><span>Use cases</span><span>UML</span></div>
+  </div>
+</header>
+<main>
+
+  <section class="exercise" id="ex1">
+    <div class="exercise-head"><span class="num">1</span><h2>FR czy NFR?</h2><p>Wybierz klasyfikację</p></div>
+    <div class="content">
+      <div class="item quiz" data-answer="FR">
+        <div class="statement">System umożliwia użytkownikowi anulowanie własnej rezerwacji.</div>
+        <div class="choices"><button class="choice" data-value="FR" aria-pressed="false">FR</button><button class="choice" data-value="NFR" aria-pressed="false">NFR</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <div class="item quiz" data-answer="NFR">
+        <div class="statement">Przy ustalonym obciążeniu 95% zapytań o dostępność sali kończy się w czasie krótszym niż 2 sekundy.</div>
+        <div class="choices"><button class="choice" data-value="FR" aria-pressed="false">FR</button><button class="choice" data-value="NFR" aria-pressed="false">NFR</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <div class="item quiz" data-answer="FR">
+        <div class="statement">Tylko administrator może dodawać nowe sale do systemu.</div>
+        <div class="choices"><button class="choice" data-value="FR" aria-pressed="false">FR</button><button class="choice" data-value="NFR" aria-pressed="false">NFR</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <div class="actions"><button class="btn secondary" id="resetQuiz">Wyczyść odpowiedzi</button></div>
+      <div class="note"><strong>Ważne:</strong> „bezpieczeństwo” jako właściwość jakościowa często pojawia się w NFR, ale konkretna reguła typu „tylko administrator może dodać salę” opisuje zachowanie systemu i może być zapisana jako FR lub reguła autoryzacji.</div>
+    </div>
+  </section>
+
+  <section class="exercise" id="ex2">
+    <div class="exercise-head"><span class="num">2</span><h2>Include, extend czy generalizacja?</h2><p>Określ rodzaj relacji pomiędzy przypadkami użycia. Zastanów się nad poprawnym kierunkiem strzałek na diagramie dla tych przypadków.</p></div>
+    <div class="content">
+      <div class="item quiz" data-answer="include">
+        <div class="statement">1. W przyjętym modelu każde złożenie zamówienia wymaga wcześniejszego uwierzytelnienia użytkownika.</div>
+        <div class="choices"><button class="choice" data-value="include" aria-pressed="false">«include»</button><button class="choice" data-value="extend" aria-pressed="false">«extend»</button><button class="choice" data-value="generalizacja" aria-pressed="false">Generalizacja</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <div class="item quiz" data-answer="extend">
+        <div class="statement">2. Podczas składania zamówienia klient może opcjonalnie podać kod rabatowy. Zamówienie jest możliwe także bez kodu.</div>
+        <div class="choices"><button class="choice" data-value="include" aria-pressed="false">«include»</button><button class="choice" data-value="extend" aria-pressed="false">«extend»</button><button class="choice" data-value="generalizacja" aria-pressed="false">Generalizacja</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <div class="item quiz" data-answer="generalizacja">
+        <div class="statement">3. „Utwórz konto klienta” i „Utwórz konto pracownika” są wyspecjalizowanymi wariantami ogólnego przypadku „Utwórz konto”, a każdy wariant ma własne reguły.</div>
+        <div class="choices"><button class="choice" data-value="include" aria-pressed="false">«include»</button><button class="choice" data-value="extend" aria-pressed="false">«extend»</button><button class="choice" data-value="generalizacja" aria-pressed="false">Generalizacja</button></div>
+        <div class="feedback" hidden></div>
+      </div>
+      <details class="reveal"><summary>Pokaż podsumowanie relacji</summary><div class="answer">
+        <p><strong>«include»:</strong> przypadek bazowy włącza zachowanie drugiego przypadku; w tym przykładzie uwierzytelnienie musi zachodzić przy każdym zamówieniu. Strzałka biegnie od „Złóż zamówienie” do „Uwierzytelnij użytkownika”.</p>
+        <p><strong>«extend»:</strong> opcjonalne zachowanie rozszerza kompletny przypadek bazowy pod określonym warunkiem. Strzałka biegnie od „Zastosuj kod rabatowy” do „Złóż zamówienie”.</p>
+        <p><strong>Generalizacja:</strong> przypadek szczegółowy jest szczególnym rodzajem przypadku ogólnego. Pusty trójkąt wskazuje przypadek ogólny. Nie stosuj tych relacji tylko po to, by rozbić algorytm na mniejsze kroki.</p>
+      </div></details>
+    </div>
+  </section>
+
+  <section class="exercise" id="ex3">
+    <div class="exercise-head"><span class="num">3</span><h2>diagram z opisu</h2><p>Samodzielnie wyznacz granicę systemu, aktorów i przypadki użycia. Następnie porównaj swój diagram z przykładowym rozwiązaniem w plantUML.</p></div>
+    <div class="content">
+      <div class="item">
+        <p><strong>Opis:</strong> Klient może sprawdzić dostępność sali i zarezerwować salę. Administrator może dodawać i usuwać sale. System korzysta z zewnętrznego operatora płatności, gdy rezerwacja wymaga opłaty.</p>
+        <p><strong>Zadanie:</strong></p>
+        <ol>
+          <li>Narysuj granicę systemu.</li>
+          <li>Dodaj aktorów i przypadki użycia, a następnie połącz je asocjacjami.</li>
+          <li>Zdecyduj, czy płatność jest obowiązkowa, czy warunkowa. Nie zakładaj automatycznie, że musi istnieć relacja `«include»`.</li>
+        </ol>
+        <div class="field"><label for="myDiagramNotes">Możesz tu wpisać kod do PlantUML. Elementy diagramu (opcjonalnie)</label><textarea id="myDiagramNotes" placeholder="Aktorzy: …&#10;Przypadki użycia: …&#10;Płatność: …"></textarea><small>Wpisy pozostają w tej stronie, dopóki jej nie odświeżysz. Nie są wysyłane na serwer.</small></div>
+      </div>
+      <details class="reveal"><summary>Pokaż przykładowe rozwiązanie</summary><div class="answer">
+        <p>Minimalni aktorzy: Klient, Administrator, Operator płatności. Przypadki użycia: Sprawdź dostępność, Zarezerwuj salę, Dodaj salę, Usuń salę oraz — jeśli płatność jest częścią zakresu — Opłać rezerwację.</p>
+        <p>Jeśli każda rezerwacja wymaga opłaty, można rozważyć `«include»` od „Zarezerwuj salę” do „Opłać rezerwację”. Jeśli opłata jest wymagana tylko w pewnych przypadkach, możliwe jest `«extend»`, pod warunkiem że rezerwacja bez tego rozszerzenia pozostaje kompletnym, sensownym przypadkiem użycia. </p>
+        <pre><code>@startuml
+left to right direction
+actor "Klient" as Customer
+actor "Administrator" as Admin
+actor "Operator płatności" as Payment
+rectangle "System rezerwacji sal" {
+  usecase "Sprawdź dostępność" as Availability
+  usecase "Zarezerwuj salę" as Reserve
+  usecase "Dodaj salę" as AddRoom
+  usecase "Usuń salę" as RemoveRoom
+  usecase "Opłać rezerwację" as Pay
+}
+Customer -- Availability
+Customer -- Reserve
+Admin -- AddRoom
+Admin -- RemoveRoom
+Payment -- Pay
+@enduml</code></pre>
+        <p class="small">Dodaj relację klienta związaną z płatnością dopiero po przyjęciu konkretnego założenia o przebiegu rezerwacji.</p>
+      </div></details>
+    </div>
+  </section>
+
+  <p><a class="toplink" href="#top">↑ Wróć na górę</a></p>
+</main>
+<footer><p>Materiały do ćwiczeń z inżynierii oprogramowania. </p></footer>
+<script>
+const explanations={
+  'FR':'Opisuje konkretną funkcję systemu: użytkownik może anulować własną rezerwację.',
+  'NFR':'To mierzalne wymaganie wydajnościowe. Warunki pomiaru, takie jak obciążenie i środowisko, powinny być określone.',
+  'FR_admin':'Opisuje konkretną regułę zachowania i dostępu. Można ją zapisać jako FR lub regułę autoryzacji; ogólne wymagania bezpieczeństwa mogą być NFR.',
+  'include':'«include» pasuje, jeśli uwierzytelnienie jest obowiązkowym zachowaniem przy każdym złożeniu zamówienia. Jeśli użytkownik jest już uwierzytelniony wcześniej i nie ma takiego kroku przy zamówieniu, założenie trzeba zmienić.',
+  'extend':'«extend» pasuje, jeśli kod rabatowy jest opcjonalnym zachowaniem, a złożenie zamówienia jest kompletne także bez niego.',
+  'generalizacja':'To generalizacja, jeśli konta klienta i pracownika są rzeczywiście wyspecjalizowanymi odmianami konta i mają odrębne zachowania lub reguły.'
+};
+const feedbackByItem=new Map();
+function updateProgress(){const done=[...document.querySelectorAll('.quiz')].filter(el=>el.dataset.selected).length;const total=document.querySelectorAll('.quiz').length;document.getElementById('progressBar').style.width=(done/total*100)+'%';document.getElementById('progressText').textContent=`${done} / ${total}`}
+document.querySelectorAll('.quiz').forEach(item=>{item.querySelectorAll('.choice').forEach(btn=>btn.addEventListener('click',()=>{item.dataset.selected=btn.dataset.value;item.querySelectorAll('.choice').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));const correct=btn.dataset.value===item.dataset.answer;const fb=item.querySelector('.feedback');let msg='';if(item.dataset.answer==='FR'&&item.querySelector('.statement').textContent.startsWith('Tylko administrator'))msg=explanations.FR_admin;else msg=explanations[item.dataset.answer]||'Sprawdź uzasadnienie poniżej.';fb.className='feedback '+(correct?'good':'bad');fb.textContent=(correct?'Poprawnie. ':'Nie tym razem. ')+msg;fb.hidden=false;updateProgress()}))});
+document.getElementById('resetQuiz').addEventListener('click',()=>{document.querySelectorAll('.quiz').forEach(item=>{delete item.dataset.selected;item.querySelectorAll('.choice').forEach(b=>b.setAttribute('aria-pressed','false'));const fb=item.querySelector('.feedback');fb.hidden=true;fb.textContent=''});updateProgress()});
+const workFields=['projectName','projectUserStory','projectFR','projectNFR','projectCriteria','projectActors'];
+document.getElementById('downloadWork').addEventListener('click',()=>{const labels=['Projekt','User story','Wymaganie funkcjonalne (FR)','Wymaganie niefunkcjonalne (NFR)','Kryteria akceptacji','Aktorzy i przypadki użycia'];let content='Ćwiczenie 4 — własny projekt\n\n';workFields.forEach((id,i)=>{content+=labels[i]+':\n'+(document.getElementById(id).value.trim()||'[nieuzupełniono]')+'\n\n'});content+='Samoocena:\n';document.querySelectorAll('.selfcheck').forEach((c,i)=>content+=`${i+1}. ${c.checked?'[x]':'[ ]'} ${c.parentElement.textContent.trim()}\n`);const blob=new Blob([content],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cwiczenie-wlasny-projekt.txt';a.click();URL.revokeObjectURL(url)});
+document.getElementById('clearWork').addEventListener('click',()=>{if(!confirm('Wyczyścić wszystkie odpowiedzi w ćwiczeniu 4?'))return;workFields.forEach(id=>document.getElementById(id).value='');document.querySelectorAll('.selfcheck').forEach(c=>c.checked=false)});
+updateProgress();
+</script>
+</body>
+</html>

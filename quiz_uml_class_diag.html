@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz UML — model domeny medycznej</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    line-height: 1.55;
+    color: #222;
+    background: #f7f7f7;
+  }
+  h1 { line-height: 1.2; }
+  .diagram, .question {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 18px 0;
+  }
+  .diagram img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 12px auto;
+  }
+  .option {
+    display: block;
+    padding: 9px 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  .option:hover { background: #f0f4f8; }
+  .option input { margin-right: 8px; }
+  .feedback { margin-top: 10px; font-weight: 600; }
+  .correct { color: #176b36; }
+  .wrong { color: #b42318; }
+  button {
+    padding: 10px 16px;
+    margin: 8px 8px 8px 0;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    font: inherit;
+    background: #2459a9;
+    color: white;
+  }
+  button.secondary { background: #555; }
+  button:disabled { opacity: .5; cursor: default; }
+  #result {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 20px 0;
+  }
+  .small { color: #555; font-size: .92rem; }
+</style>
+</head>
+<body>
+
+<h1>Quiz: interpretacja diagramu klas UML</h1>
+<p>
+  Przećwicz interpretowanie liczności asocjacji w modelu domeny medycznej.
+  W każdym pytaniu wybierz jedną odpowiedź. Informacja zwrotna pojawi się
+  po zaznaczeniu odpowiedzi.
+</p>
+
+<section class="diagram">
+  <h2>Diagram do analizy</h2>
+  <img
+    src="https://www.plantuml.com/plantuml/png/AyxEp2j8B4hCLKZEIImkTYmfASfCAYr9zKpEpmlEh4fLCE3Y0iieUEVd5PVcb2JcbIXKSzN2H0CIaxDIKOMSC_AByfCIaOLyKhCJYwe2YXApIogpIxEEj2PN8gGHHYTdeUlAn3GbkAeWioGn9mzg0im1IePwUbfA2hgwG9OIacEveCv1A82ne3gncu3DoPWgeIna3t0Xs9XsWhs4HuM94hedkRWSKlDIIdDp0000"
+    alt="Diagram klas UML modelu domeny medycznej">
+  <p class="small">
+    Jeśli diagram się nie wyświetla,
+    <a href="https://www.plantuml.com/plantuml/png/AyxEp2j8B4hCLKZEIImkTYmfASfCAYr9zKpEpmlEh4fLCE3Y0iieUEVd5PVcb2JcbIXKSzN2H0CIaxDIKOMSC_AByfCIaOLyKhCJYwe2YXApIogpIxEEj2PN8gGHHYTdeUlAn3GbkAeWioGn9mzg0im1IePwUbfA2hgwG9OIacEveCv1A82ne3gncu3DoPWgeIna3t0Xs9XsWhs4HuM94hedkRWSKlDIIdDp0000"
+       target="_blank" rel="noopener">otwórz go w nowej karcie</a>.
+  </p>
+  <p><strong>Przypomnienie:</strong> liczność przy danej klasie określa, ile obiektów tej klasy może być powiązanych z jednym obiektem klasy po drugiej stronie asocjacji.</p>
+</section>
+
+<div id="quiz"></div>
+
+<button id="finish" onclick="finishQuiz()">Zakończ quiz i pokaż wynik</button>
+<button class="secondary" onclick="resetQuiz()">Rozpocznij od nowa</button>
+<div id="result" aria-live="polite"></div>
+
+<script>
+const questions = [
+  {
+    q: "1. Ilu konsultantów może mieć jeden pacjent według diagramu?",
+    options: [
+      "Dokładnie jednego",
+      "Co najmniej jednego",
+      "Od jednego do czterech",
+      "Dowolną liczbę, także zero"
+    ],
+    answer: 0,
+    explanation: "Przy klasie Konsultant widnieje liczność 1. Jeden Pacjent jest więc powiązany dokładnie z jednym Konsultantem."
+  },
+  {
+    q: "2. Ilu pacjentów może być powiązanych z jednym konsultantem?",
+    options: [
+      "Dokładnie jeden",
+      "Zero lub jeden",
+      "Co najmniej jeden",
+      "Maksymalnie czterech"
+    ],
+    answer: 2,
+    explanation: "Przy klasie Pacjent widnieje 1..*. Jeden Konsultant jest więc powiązany z co najmniej jednym Pacjentem."
+  },
+  {
+    q: "3. Czy według diagramu pacjent może nie mieć żadnej choroby?",
+    options: [
+      "Tak, bo 1..* oznacza zero lub więcej",
+      "Nie, ponieważ 1..* oznacza co najmniej jeden obiekt",
+      "Tak, ale tylko wtedy, gdy ma konsultanta",
+      "Diagram nie pokazuje relacji między Pacjentem a Chorobą"
+    ],
+    answer: 1,
+    explanation: "Asocjacja Choroba–Pacjent ma liczność 1..* na obu końcach. Każdy Pacjent jest powiązany z co najmniej jedną Chorobą."
+  },
+  {
+    q: "4. Co wynika z liczności przy klasie LekarzPraktykujący?",
+    options: [
+      "Jeden pacjent może mieć wielu lekarzy praktykujących",
+      "Jeden lekarz praktykujący może mieć tylko jednego pacjenta",
+      "Jeden pacjent ma dokładnie jednego lekarza praktykującego",
+      "Każdy lekarz praktykujący musi być też konsultantem"
+    ],
+    answer: 2,
+    explanation: "Liczność 1 przy klasie LekarzPraktykujący oznacza, że każdy Pacjent ma dokładnie jednego takiego lekarza. Liczność 1..* przy Pacjencie oznacza, że lekarz ma co najmniej jednego pacjenta."
+  },
+  {
+    q: "5. Jak interpretować asocjację Pacjent–Konsultacja, gdzie na obu końcach jest 1..*?",
+    options: [
+      "Pacjent może mieć zero konsultacji",
+      "Każdy pacjent ma co najmniej jedną konsultację, a każda konsultacja jest powiązana z co najmniej jednym pacjentem",
+      "Każdy pacjent ma dokładnie jedną konsultację",
+      "Konsultacja może dotyczyć najwyżej jednego pacjenta"
+    ],
+    answer: 1,
+    explanation: "1..* po obu stronach oznacza co najmniej jeden obiekt po każdej stronie. Jest to asocjacja wiele-do-wielu, z minimum jednym po obu końcach."
+  },
+  {
+    q: "6. Z ilu lekarzy szpitalnych może składać się obsada jednej konsultacji?",
+    options: [
+      "Dokładnie z jednego",
+      "Od jednego do czterech",
+      "Od zera do czterech",
+      "Z co najmniej czterech"
+    ],
+    answer: 1,
+    explanation: "Przy klasie LekarzSzpitalny jest 1..4. Jedna Konsultacja jest więc powiązana z co najmniej jednym i maksymalnie czterema lekarzami szpitalnymi."
+  },
+  {
+    q: "7. Z iloma konsultacjami może być powiązany jeden lekarz szpitalny?",
+    options: [
+      "Z dokładnie jedną",
+      "Z maksymalnie czterema",
+      "Z co najmniej jedną",
+      "Z zerem lub większą liczbą"
+    ],
+    answer: 2,
+    explanation: "Przy klasie Konsultacja znajduje się 1..*. Jeden LekarzSzpitalny może być więc powiązany z co najmniej jedną Konsultacją. Limit 1..4 dotyczy liczby lekarzy przypadających na jedną konsultację, nie liczby konsultacji lekarza."
+  },
+  {
+    q: "8. Co oznacza liczność 1..*?",
+    options: [
+      "Dokładnie jeden obiekt",
+      "Zero lub dowolnie wiele obiektów",
+      "Jeden lub dowolnie wiele obiektów",
+      "Od jednego do czterech obiektów"
+    ],
+    answer: 2,
+    explanation: "1..* oznacza co najmniej jeden obiekt, bez określonej górnej granicy. Zapis 0..* oznaczałby zero lub więcej."
+  },
+  {
+    q: "9. Czy z diagramu wynika, że każda konsultacja dotyczy dokładnie jednej choroby?",
+    options: [
+      "Tak, bo konsultacja jest elementem modelu medycznego",
+      "Tak, ponieważ każda konsultacja ma lekarza",
+      "Nie — na diagramie nie ma asocjacji Konsultacja–Choroba",
+      "Nie, ponieważ choroba może dotyczyć wielu pacjentów"
+    ],
+    answer: 2,
+    explanation: "Nie należy dopowiadać relacji, których diagram nie przedstawia. Widać asocjację Choroba–Pacjent, ale nie ma bezpośredniej asocjacji Konsultacja–Choroba."
+  },
+  {
+    q: "10. Na końcu asocjacji Pacjent–Konsultant liczność przy Pacjent wynosi 1..*. Co opisuje ta liczność?",
+    options: [
+      "Ilu konsultantów może mieć jeden pacjent",
+      "Ilu pacjentów może być powiązanych z jednym konsultantem",
+      "Ilu pacjentów może być powiązanych z jedną chorobą",
+      "Ilu lekarzy może uczestniczyć w jednej konsultacji"
+    ],
+    answer: 1,
+    explanation: "Liczność przy końcu Pacjent mówi, ile obiektów klasy Pacjent może być powiązanych z jednym obiektem klasy Konsultant."
+  }
+];
+
+const quiz = document.getElementById("quiz");
+const userAnswers = Array(questions.length).fill(null);
+
+function renderQuiz() {
+  quiz.innerHTML = "";
+  questions.forEach((item, i) => {
+    const section = document.createElement("section");
+    section.className = "question";
+    const heading = document.createElement("h3");
+    heading.textContent = item.q;
+    section.appendChild(heading);
+
+    item.options.forEach((option, j) => {
+      const label = document.createElement("label");
+      label.className = "option";
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "q" + i;
+      radio.value = j;
+      radio.checked = userAnswers[i] === j;
+      radio.addEventListener("change", () => {
+        userAnswers[i] = j;
+        showFeedback(i, section);
+      });
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(option));
+      section.appendChild(label);
+    });
+
+    const feedback = document.createElement("div");
+    feedback.className = "feedback";
+    feedback.id = "feedback" + i;
+    section.appendChild(feedback);
+    quiz.appendChild(section);
+    showFeedback(i, section);
+  });
+}
+
+function showFeedback(i, section) {
+  const feedback = section.querySelector(".feedback");
+  if (userAnswers[i] === null) {
+    feedback.textContent = "";
+    feedback.className = "feedback";
+    return;
+  }
+  const correct = userAnswers[i] === questions[i].answer;
+  feedback.textContent = (correct ? "Dobrze! " : "Nie tym razem. ") +
+    questions[i].explanation;
+  feedback.className = "feedback " + (correct ? "correct" : "wrong");
+}
+
+function finishQuiz() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const score = userAnswers.reduce(
+    (sum, a, i) => sum + (a === questions[i].answer ? 1 : 0), 0
+  );
+  const result = document.getElementById("result");
+  result.textContent = `Wynik: ${score}/${questions.length}. Odpowiedziano na ${answered} z ${questions.length} pytań.`;
+  result.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function resetQuiz() {
+  userAnswers.fill(null);
+  document.getElementById("result").textContent = "";
+  renderQuiz();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
+
